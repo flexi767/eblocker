@@ -12,6 +12,9 @@ in **[flexi767/eblocker-docker](https://github.com/flexi767/eblocker-docker)**
   (a container's `free -m` shows the host's RAM, not its limit).
 * `certificate-validator.sh`: honours `CERTVALIDATOR_JAVA_MEMORY_SETTINGS`.
 * `squid.static`: `cache_mem 8 MB`, `memory_pools off` (caching is disabled anyway).
+* `DeviceControllerImpl`: refuses to turn on "automatically enable new devices"
+  (settings and the activation wizard, which also enables every known device)
+  with HTTP 403 unless the container runs with `EBLOCKER_NETWORK_WIDE=true`.
 * this file.
 
 Keep this branch small; container-only behaviour belongs in eblocker-docker.

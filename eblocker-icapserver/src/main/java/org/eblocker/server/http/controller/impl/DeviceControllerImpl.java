@@ -325,14 +325,27 @@ public class DeviceControllerImpl implements DeviceController {
     @Override
     public void setAutoEnableNewDevices(Request request, Response response) {
         Boolean isAutoEnableNewDevices = request.getBodyAs(Boolean.class);
+        rejectNetworkWideUnlessAllowed(isAutoEnableNewDevices);
         deviceFactory.setAutoEnableNewDevices(isAutoEnableNewDevices);
     }
 
     @Override
     public void setAutoEnableNewDevicesAndResetExisting(Request request, Response response) {
         Boolean isAutoEnableNewDevices = request.getBodyAs(Boolean.class);
+        rejectNetworkWideUnlessAllowed(isAutoEnableNewDevices);
         deviceFactory.setAutoEnableNewDevices(isAutoEnableNewDevices);
         deviceService.setEnabledForAllButCurrentDevice(isAutoEnableNewDevices, getCurrentDevice(request));
+    }
+
+    /**
+     * Docker build: enabling all/new devices ARP-spoofs the whole LAN. Only allowed
+     * when the container runs with EBLOCKER_NETWORK_WIDE=true (see DOCKER.md).
+     */
+    private static void rejectNetworkWideUnlessAllowed(Boolean enable) {
+        if (Boolean.TRUE.equals(enable) && !"true".equals(System.getenv("EBLOCKER_NETWORK_WIDE"))) {
+            log.warn("Refused to enable all/new devices: EBLOCKER_NETWORK_WIDE is not true");
+            throw new ForbiddenException("Network-wide mode is disabled in this container (EBLOCKER_NETWORK_WIDE=false)");
+        }
     }
 
     @Override

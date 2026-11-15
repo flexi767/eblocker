@@ -37,5 +37,11 @@ MEMORY_SETTINGS="\
 -Dio.netty.allocator.numDirectArenas=${NUM_ARENAS} \
 -Dio.netty.allocator.numHeapArenas=${NUM_ARENAS}"
 
+# Container builds (flexi767/eblocker-docker) pass explicit JVM memory flags,
+# because "free -m" reports the host's RAM, not the container's limit.
+if [ -n "$EBLOCKER_JAVA_MEMORY_SETTINGS" ]; then
+    MEMORY_SETTINGS="$EBLOCKER_JAVA_MEMORY_SETTINGS"
+fi
+
 # Run the ICAP server:
 exec java $MEMORY_SETTINGS -Dlog4j2.configurationFile=$LOG4JCONF -jar $BASEDIR/lib/${project.build.finalName}.jar

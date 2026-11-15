@@ -4,6 +4,10 @@
 
 request_timeout 30 seconds
 
+# Keep squid's memory footprint small (eBlocker disables caching anyway, see "cache deny all"):
+cache_mem 8 MB
+memory_pools off
+
 acl SSL_ports port 443
 acl SSL_ports port 3443     # eblocker https
 

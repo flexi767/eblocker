@@ -18,9 +18,8 @@ Keep this branch small; container-only behaviour belongs in eblocker-docker.
 
 ## Operator rules (summary)
 
-* Never enable network-wide takeover (auto-enable of new devices,
-  `EBLOCKER_NETWORK_WIDE=true`) or eBlocker's IPv6 features without the
-  owner's explicit approval.
+* Device settings (enabled devices, auto-enable of new devices) belong to the
+  owner and are set in the web UI.
 * Never change the host's networking (NIC, WireGuard, firewall persistence,
   DNS).
 * eBlocker ARP-spoofs enabled devices. `docker compose stop eblocker` heals
